@@ -1,5 +1,20 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@material-ui/data-grid';
+import { server_calls } from '../../api'
+import { useGetData } from '../custom-hooks'
+import { Button, Dialog, 
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle } from '@material-ui/core';
+import {PlayersForm} from '../PlayersForm'
+
+
+interface gridData{
+  data:{
+    id?:string
+  }
+}
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -37,10 +52,51 @@ const rows = [
 ];
 
 export const DataTable = () => {
-    return(
+  let { playerData, getData} = useGetData();
+  let [open, setOpen] = useState(false);
+  let [gridData, setData] = useState<gridData>({data:{}})
+
+  let handleOpen = () => {
+    setOpen(true)
+  }
+  let handleClose = () => {
+    setOpen(false)
+  }
+  let deleteData = () => {
+    server_calls.delete(gridData.data.id!)
+    getData()
+  }
+
+  console.log(gridData.data.id)
+
+
+  return(
         <div style={{height: 400, width: '100%'}}>
             <h1>List of Soccer Players</h1>
-            <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
+            <DataGrid rows={playerData} columns={columns} pageSize={10} checkboxSelection onRowSelected = { setData } />
+
+
+
+            <Button onClick={handleOpen}>Update</Button>
+            <Button variant="contained" color="secondary" onClick={deleteData}>Delete</Button>
+
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+              
+              
+              <DialogTitle id="form-dialog-title"> Update Players</DialogTitle>
+              <DialogContent>
+                <DialogContentText> Update Player</DialogContentText>
+                <PlayersForm id={gridData.data.id!} />
+              </DialogContent>
+              
+              <DialogActions>
+                <Button onClick = {handleClose} color="primary">Cancel</Button>
+                <Button onClick = {handleClose} color="primary">Done</Button>
+              </DialogActions>
+
+
+            </Dialog>
+
         </div>
     );
 };

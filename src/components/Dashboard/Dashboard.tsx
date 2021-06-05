@@ -8,21 +8,28 @@ import { Drawer as MUIDrawer,
     useTheme,
     makeStyles,
     createStyles,
+    Typography,
     AppBar,
     Toolbar,
     IconButton,
     Divider,
-    Button
+    Button, 
+    Dialog, 
+    DialogContent, 
+    DialogContentText, 
+    DialogActions,
+    DialogTitle,
 } from '@material-ui/core';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import clsx from 'clsx';
 import { RouteComponentProps, withRouter, Switch, Route } from 'react-router-dom';
-import { DataTable } from '../../components'
-
+import { DataTable, PlayersForm } from '../../components'
 const drawerWidth = 240;
+
 
 const useStyles = makeStyles((theme:Theme) => 
     createStyles({
@@ -103,6 +110,8 @@ export const Dashboard = withRouter((props:DashProps) => {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
+
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -111,6 +120,16 @@ export const Dashboard = withRouter((props:DashProps) => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    //HANDLE DIALOG OPEN/CLOSE
+    const handleDialogClickOpen = () => {
+        setDialogOpen(true);
+    }
+    const handleDialogClickClose = () => {
+        setDialogOpen(false);
+    }
+    
+    
 
     const itemsList = [
         {
@@ -136,7 +155,24 @@ export const Dashboard = withRouter((props:DashProps) => {
                      className={clsx(classes.menuButton, open && classes.hide)}>
                          <MenuIcon />
                     </IconButton>
-                    <Button className={classes.toolbar_button}>Search Players!</Button>
+                    
+                    <Button className={classes.toolbar_button} onClick={handleDialogClickOpen}>Add Players!</Button>
+                    
+                    <Dialog open ={dialogOpen} onClose={handleDialogClickClose} aria-labelledby="for-dialog-title">
+                        <DialogTitle id="form-dialog-title">Add New Player</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText> Add New Player</DialogContentText>
+                            <PlayersForm/>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick= {handleDialogClickClose} color="primary">Cancel</Button>
+                            <Button onClick= {handleDialogClickClose} color="secondary">Done</Button>
+                        </DialogActions>
+                    </Dialog>
+
+
+
+
                 </Toolbar>
                 </AppBar>
                 <MUIDrawer
