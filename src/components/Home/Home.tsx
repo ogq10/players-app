@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import drone_image from '../../assets/images/soccer_field.jpg';
 import { Link } from 'react-router-dom';
 
+import {AuthCheck} from 'reactfire';
 
 interface Props{
     title: string
@@ -80,8 +81,15 @@ export const Home = ( props:Props ) => {
                             <Link to="/dashboard" className={classes.nav_a}>Dashboard</Link>
                         </li>
                         <li>
-                            <Link to="/signin" className={classes.nav_a}>Sign In</Link>
+                            <Link to="/signin" className={classes.nav_a}>Sign Out</Link>
                         </li>
+                        <AuthCheck fallback={
+                            <li>
+                                <Link to="/signin" className={classes.nav_a}>Sign In</Link>
+                            </li>
+                            
+                        }>
+                        </AuthCheck>
                     </ul>
                 </div>
             </nav>

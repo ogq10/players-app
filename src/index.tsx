@@ -5,12 +5,18 @@ import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux';
 import { store } from './redux/store'
 import './styles.css'
+import 'firebase/auth';
+import { FirebaseAppProvider, AuthCheck } from 'reactfire'; 
+import { firebaseConfig } from './firebaseConfig' 
+
+
 //routing 
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 
 ReactDOM.render(
     <React.StrictMode>
+        <FirebaseAppProvider firebaseConfig={firebaseConfig}> 
         <Provider store={store}>
         <Router>
             <Switch>
@@ -24,6 +30,7 @@ ReactDOM.render(
             </Switch>
         </Router>
         </Provider>
+        </FirebaseAppProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );
